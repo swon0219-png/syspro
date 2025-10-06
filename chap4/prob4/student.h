@@ -1,1 +1,6 @@
-22222222 dd잉ㅇ 100 22222222 dkfdsf 40 3 23 21 
+struct student {
+   int id; 
+   char name[20]; 
+   short score; 
+};
+
