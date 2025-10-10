@@ -1,39 +1,39 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+#define MAXLINE 80
 
 int main(int argc, char *argv[])
 {
     FILE *fp;
-    int c, line_number = 1;
-    int start_arg = 1, show_line_number = 0;
+    char buffer[MAXLINE];
+    int line_number = 1;
+    int start = 1;
 
-    if (argc > 1 && strcmp(argv[1], "-n") == 0) {
-        show_line_number = 1;
-        start_arg = 2;
-    }
+    if (argc >= 2 && argv[1][0] == '-' && argv[1][1] == 'n')
+        start = 2;
 
-    if (argc <= start_arg) {
-        fp = stdin;
-        if (show_line_number) printf("%d ", line_number++);
-        while ((c = getc(fp)) != EOF) {
-            putc(c, stdout);
-            if (show_line_number && c == '\n') printf("%d ", line_number++);
+    if (argc <= start) {
+        while (fgets(buffer, MAXLINE, stdin)) {
+            if (argc >= 2 && argv[1][0] == '-' && argv[1][1] == 'n')
+                printf("%3d %s", line_number++, buffer);
+            else
+                printf("%s", buffer);
         }
-        return 0;
-    }
+    } else {
+        for (int i = start; i < argc; i++) {
+            fp = fopen(argv[i], "r");
+            if (!fp)
+                continue;
 
-    for (int i = start_arg; i < argc; i++) {
-        fp = fopen(argv[i], "r");
-        if (!fp) {
-            fprintf(stderr, "Error: Cannot open file %s\n", argv[i]);
-            continue;
+            while (fgets(buffer, MAXLINE, fp)) {
+                if (argc >= 2 && argv[1][0] == '-' && argv[1][1] == 'n')
+                    printf("%3d %s", line_number++, buffer);
+                else
+                    printf("%s", buffer);
+            }
+
+            fclose(fp);
         }
-        if (show_line_number) printf("%d ", line_number++);
-        while ((c = getc(fp)) != EOF) {
-            putc(c, stdout);
-            if (show_line_number && c == '\n') printf("%d ", line_number++);
-        }
-        fclose(fp);
     }
 
     return 0;
