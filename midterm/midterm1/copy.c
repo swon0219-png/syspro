@@ -39,9 +39,17 @@ int main(int argc, char *argv[])
         } else if (mode == 2) {
             c = toupper(c);
         }
-       
-	}
-	fclose(fp1);
-	fclose(fp2);
-	return 0;
+        
+        if (fputc(c, fp2) == EOF) {
+            fprintf(stderr, "Write Error\n");
+            fclose(fp1);
+            fclose(fp2);
+            return 3;
+        }
+    }
+    
+    fclose(fp1);
+    fclose(fp2);
+    return 0;
 }
+
