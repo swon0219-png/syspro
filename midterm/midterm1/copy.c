@@ -9,14 +9,14 @@ int main(int argc, char *argv[])
     int mode;
     
     if (argc != 4) {
-        fprintf(stderr, "How to use: %s mode File1 File2\n", argv[0]);
+        fprintf(stderr, "How to use: %s mode source.txt destination.txt\n", argv[0]);
         return 1;
     }
     
     mode = atoi(argv[1]);
     
     if (mode < 0 || mode > 2) {
-        fprintf(stderr, "Mode Error: mode must be 0, 1, or 2\n");
+        fprintf(stderr, "Mode Error\n");
         return 1;
     }
     
