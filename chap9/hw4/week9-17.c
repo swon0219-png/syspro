@@ -44,11 +44,8 @@ int main() {
             if(background)
                 printf("[%d] child process start\n", getpid());
 
-            execvp(argv[0], argv);
-            // execvp 실패 시
-            if(!background) { 
-                // 잘못된 명령어이면 Parent process end/Exit만 출력
-                _exit(1); 
+            if(execvp(argv[0], argv) == -1) {
+                _exit(1);
             }
         } else {
             int status;
@@ -57,6 +54,7 @@ int main() {
             if(WIFEXITED(status) && WEXITSTATUS(status) != 0) {
                 printf("Parent process end\n");
                 printf("Exit\n\n");
+                break;
             } else {
                 if(background)
                     printf("[%d] child process end %d\n", getpid(), pid);
